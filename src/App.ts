@@ -19,12 +19,10 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use("api/realestates/upload", express.static("upload"))
 
-
-
 // Routes Imports
 
-import authRoute from "./routes/auth"
-import propertiesRoute from "./routes/properties"
+import authRoute from "./api/auth/auth.router"
+import propertiesRoute from "./api/properties/properties.router"
 
 // Routes
 app.use("/api/user", authRoute)
