@@ -1,6 +1,5 @@
 import { Router, Request } from "express"
 const router = Router()
-
 import multer from "multer"
 
 import verify from "../../middlewares/verifyToken"
@@ -13,7 +12,7 @@ import {
 const storage = multer.diskStorage({
 	destination: (req: Request, file, cb) => {
 		// If it goes wrong just change it back to ../upload/
-		cb(null, "../upload/")
+		cb(null, `${__dirname}/../../../upload`)
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + file.originalname)

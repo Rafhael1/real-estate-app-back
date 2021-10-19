@@ -32,6 +32,7 @@ export const createPropertyController = async(req: Request, res: Response) => {
 
 		const imagePaths: string[] = []
 
+		// convert into forEach
 		for(let i = 0; i < filePath.length; i++ ){
 			imagePaths.push(filePath[i].path)
 		}
