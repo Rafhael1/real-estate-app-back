@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express"
-import jwt from "jsonwebtoken"
+import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 
 const verify = (req: Request, res: Response, next: NextFunction) => {
 	const token: any = req.headers.authtoken
 	if(!token) {
-		return res.status(500).send("Access Denied")
+		return res.status(500).send('Access Denied')
 	}
 	try {
 		const verified = jwt.verify(token, process.env.TOKEN!)
@@ -15,7 +15,7 @@ const verify = (req: Request, res: Response, next: NextFunction) => {
 		next()
 		
 	} catch (error) {
-		res.status(400).send("Invalid Token")
+		res.status(400).send('Invalid Token')
 	}
 }
 

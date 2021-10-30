@@ -1,6 +1,6 @@
 // @ts-ignore
-import { name, version } from "../../package.json"
-import { Request, Response, NextFunction } from "express"
+import { name, version } from '../../package.json'
+import { Request, Response, NextFunction } from 'express'
 
 export const content = ( req: Request, res: Response, next: NextFunction) => {
 

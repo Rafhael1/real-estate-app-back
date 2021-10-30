@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express'
 
-import Property from "../../models/property"
-import User from "../../models/user"
+import Property from '../../models/property'
+import User from '../../models/user'
 
 
 export const getPropertiesController = async (req: Request, res: Response) => {
@@ -56,7 +56,7 @@ export const createPropertyController = async(req: Request, res: Response) => {
 
 		Property.create(record)
 
-		res.send("Uploaded sucessfully")
+		res.send('Uploaded sucessfully')
 
 	} catch (error) {
 		console.log(error)

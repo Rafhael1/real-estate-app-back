@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 const PropertySchema = new mongoose.Schema({
 	title: { type: String, required: false, },
@@ -7,7 +7,7 @@ const PropertySchema = new mongoose.Schema({
 	bedrooms: { type: Number, required: false, },
 	squareMeter: { type: Number, required: false },
 	adress: { type: String, required: false, },
-	propertyType: { type: String, required: false, default:  "Residencial" },
+	propertyType: { type: String, required: false, default:  'Residencial' },
 	country: { type: String, required: false, },
 	price: { type: String, required: false, },
 	status: { type: String, required: false, },
@@ -27,6 +27,6 @@ const PropertySchema = new mongoose.Schema({
 
 // Status: For sale, rent, under construction, Sold out
 
-const model = mongoose.model("Property", PropertySchema)
+const model = mongoose.model('Property', PropertySchema)
 
 export default model

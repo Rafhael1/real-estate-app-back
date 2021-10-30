@@ -1,24 +1,24 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express'
 
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
-import verify from "../../middlewares/verifyToken"
-import { validationResult } from "express-validator"
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+// import verify from '../../middlewares/verifyToken'
+import { validationResult } from 'express-validator'
 
-import User from "../../models/user"
+import User from '../../models/user'
 
 export const registerController = async (req: Request, res: Response) => {
 	const errors = validationResult(req)
 	try {
 		if (!errors.isEmpty()) {
-			return res.status(400).send("Invalid email address. Please try again.")
+			return res.status(400).send('Invalid email address. Please try again.')
 		}
 
 		// Check if user already exists
 		const userExist = await User.findOne({ email: req.body.email })
 
 		if(userExist){
-			return res.status(400).send("User already exists")
+			return res.status(400).send('User already exists')
 		}
 
 		// Encrypt passwords
@@ -46,21 +46,21 @@ export const loginController = async (req: Request, res: Response) => {
 	const errors = validationResult(req)
 	try {
 		if (!errors.isEmpty()) {
-			return res.status(400).send("Invalid email address. Please try again.")
+			return res.status(400).send('Invalid email address. Please try again.')
 		}
 
 		// Check if user exists
 		const user = await User.findOne({ email: req.body.email })
 
 		if(!user){
-			return res.status(400).send("Email or password is wrong!")
+			return res.status(400).send('Email or password is wrong!')
 		}
 
 		// Check if password is correct
 		const validPassword = await bcrypt.compare(req.body.password, user.password)
 
 		if(!validPassword){
-			return res.status(500).send("Email or password is wrong!")
+			return res.status(500).send('Email or password is wrong!')
 		}
 
 		// Create and assign a jwt token
@@ -68,13 +68,13 @@ export const loginController = async (req: Request, res: Response) => {
 		const token = jwt.sign({ __id: user.id }, process.env.TOKEN!)
 
 		res.json({
-			"authToken": token,
-			"message": "Logged In"
+			'authToken': token,
+			'message': 'Logged In'
 		}).status(200)
 
 
 	} catch (error) {
-		res.status(400).send("Something went wrong!")
+		res.status(400).send('Something went wrong!')
 	}
 }
 
@@ -85,10 +85,7 @@ export const verifyUserController = async(req: Request, res: Response) => {
 		
 		await User.findOne({ _id: userId.__id })
 
-		res.json({
-			true: "asfasfasfasf",
-			test: "rolaaaaaaaaa"
-		})
+		res.send(true)
 
 	} catch (error) {
 		res.status(500).send(error)

@@ -7,6 +7,7 @@
     "dev": "nodemon ./src/App.ts",
     "start": "node ./build/App.js",
     "client": "yarn --cwd ../client run start",
+    "lint": "eslint .",
     "build": "tsc",
     "tsc": "tsc -w"
   },

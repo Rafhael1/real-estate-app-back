@@ -1,13 +1,13 @@
-import { Router, Request } from "express"
+import { Router, Request } from 'express'
 const router = Router()
-import multer from "multer"
+import multer from 'multer'
 
-import verify from "../../middlewares/verifyToken"
+import verify from '../../middlewares/verifyToken'
 
 import {
 	getPropertiesController,
 	createPropertyController
-} from "./properties.controller"
+} from './properties.controller'
 
 const storage = multer.diskStorage({
 	destination: (req: Request, file, cb) => {
@@ -26,8 +26,8 @@ const upload = multer({
 	}
 })
 
-router.get("/properties", getPropertiesController)
+router.get('/properties', getPropertiesController)
 
-router.post("/create-real-estate", verify, upload.array("images"), createPropertyController)
+router.post('/create-real-estate', verify, upload.array('images'), createPropertyController)
 
 export default router
