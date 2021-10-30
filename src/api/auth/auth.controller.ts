@@ -85,7 +85,10 @@ export const verifyUserController = async(req: Request, res: Response) => {
 		
 		await User.findOne({ _id: userId.__id })
 
-		res.send(true)
+		res.json({
+			true: "asfasfasfasf",
+			test: "rolaaaaaaaaa"
+		})
 
 	} catch (error) {
 		res.status(500).send(error)
