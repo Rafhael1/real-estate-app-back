@@ -7,7 +7,6 @@ export const content = ( req: Request, res: Response, next: NextFunction) => {
 	const response = res.json
 	// @ts-ignore
 	res.json = (obj) => {
-		console.log(obj)
 		obj = {
 			meta: {
 				api: name,
@@ -20,6 +19,7 @@ export const content = ( req: Request, res: Response, next: NextFunction) => {
 			},
 			records: obj
 		}
+		obj.meta.totalPages = Math.floor(obj.meta.totalResults / obj.meta.limit)
 		response.call(res, obj)
 	}
 

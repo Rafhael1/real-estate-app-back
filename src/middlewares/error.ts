@@ -9,12 +9,12 @@ export const errorSetup = (req: Request, res:Response, next: NextFunction) => {
 }
 
 // @ts-ignore
-export const errorHandler = (err, req: Request, res:Response) => {
+export const error = (err, req: Request, res:Response, next: NextFunction) => {
 	res.status(err.status || 500)
 	res.send({
 		error: {
 			status: err.status || 500,
-			message: err.message
+			message: 'Something went wrong!'
 		}
 	})
 }
