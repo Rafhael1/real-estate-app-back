@@ -3,15 +3,20 @@ import { Request, Response } from 'express'
 import Property from '../../models/property'
 import User from '../../models/user'
 
+export const getProperties = async (req: Request, res: Response) => {
+	const properties = await Property.find({}).limit(25)
 
-export const getPropertiesController = async (req: Request, res: Response) => {
-	const data = await Property.find({}).limit(10)
-
-	res.send(data)
+	res.send(properties)
 
 }
 
-export const createPropertyController = async(req: Request, res: Response) => {
+export const getPropertyById = async (req: Request, res: Response) => {
+	const property = await Property.find({})
+
+	res.send(property)
+}
+
+export const createProperty = async(req: Request, res: Response) => {
 	const filePath: any = req.files
 	const {
 		title,
