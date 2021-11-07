@@ -61,14 +61,12 @@ export const loginController = async (req: Request, res: Response) => {
 	}
 
 	// Create and assign a jwt token
-
 	const token = jwt.sign({ __id: user.id }, process.env.TOKEN!)
 
-	res.status(200).json({
+	res.json({
 		'authToken': token,
 		'message': 'Logged In'
 	})
-
 }
 
 export const verifyUserController = async(req: Request, res: Response) => {
