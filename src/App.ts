@@ -28,9 +28,11 @@ app.use('api/realestates/upload', express.static('upload'))
 
 import authRoute from './core/auth/auth.router'
 import propertiesRoute from './core/properties/properties.router'
+import dashboardRoute from './core/ dashboard/dashboard.router'
 
 // Routes
 app.use('/api/user', api(authRoute))
+app.use('/api/dashboard', api(dashboardRoute))
 app.use('/api/realestates', api(propertiesRoute))
 
 app.listen(port,()=>{
