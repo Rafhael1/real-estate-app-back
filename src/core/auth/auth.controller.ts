@@ -48,7 +48,7 @@ export const loginController = async (req: Request, res: Response) => {
 
 	// Check if user exists
 	const user = await User.findOne({ email: req.body.email })
-
+	
 	if(!user){
 		return res.status(400).send('Email or password is wrong!')
 	}

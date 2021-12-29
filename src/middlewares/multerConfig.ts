@@ -4,7 +4,7 @@ import multer from 'multer'
 export const storage = multer.diskStorage({
 	destination: (req: Request, file, cb) => {
 		// If it goes wrong just change it back to ../upload/
-		cb(null, `${__dirname}/../../../upload`)
+		cb(null, `${__dirname}../../../../real-estate-app-uploads`)
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + file.originalname)

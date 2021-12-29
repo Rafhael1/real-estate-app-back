@@ -1,6 +1,8 @@
 import express from 'express'
 const app = express()
 const port = process.env.PORT || 8000
+import  morgan  from 'morgan'
+import helmet from 'helmet'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
@@ -17,6 +19,8 @@ mongoose.connect( process.env.DB_CONNECT!, {
 })
 
 // Middlewares
+app.use(morgan('tiny'))
+app.use(helmet())
 app.use(error)
 app.use(content)
 app.use(express.json())

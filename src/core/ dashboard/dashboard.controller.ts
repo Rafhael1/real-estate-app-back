@@ -1,14 +1,13 @@
 import { Request, Response } from 'express'
 
 import Property from '../../models/property'
-import User from '../../models/property'
+import User from '../../models/user'
 
 export const getAllUserPosts = async(req: Request, res: Response) => {
 	// @ts-expect-error
 	const userId: string = req.user.__id
     
 	const properties = await Property.find({ 'user.id': userId })
-	console.log(properties)
 
 	res.send(properties)
 }
@@ -29,8 +28,9 @@ export const createProperty = async(req: Request, res: Response) => {
 		
 	// @ts-ignore
 	const userId = req.user.__id
-	const userData = await User.findOne({ _id: userId })
 
+	const userData = await User.findOne({ _id: userId })
+	
 	const imagePaths: string[] = []
 
 	// convert into forEach
@@ -55,10 +55,21 @@ export const createProperty = async(req: Request, res: Response) => {
 		},
 	} 
 
-	Property.create(record)
-
+	await Property.create(record)
+	
 	res.send('Uploaded sucessfully')
 
+}
+
+export const editPostById = async(req: Request, res: Response) => {
+	const propertyId: string = req.params.postId
+
+	const filter = { _id: propertyId }
+	const update = req.body
+	
+	await Property.updateOne(filter, update)
+
+	res.send('Post Updated Successfully')
 }
 
 export const deletePostById = async(req: Request, res: Response) => {
