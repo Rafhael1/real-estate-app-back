@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const PropertySchema = new mongoose.Schema({
 	title: { type: String, required: false, },
@@ -23,10 +23,10 @@ const PropertySchema = new mongoose.Schema({
 		default: Date.now
 	},
 	views: { type: Number, required: false, default: 0  }
-})
+});
 
 // Status: For sale, rent, under construction, Sold out
 
-const model = mongoose.model('Property', PropertySchema)
+const model = mongoose.model('Property', PropertySchema);
 
-export default model
+export default model;

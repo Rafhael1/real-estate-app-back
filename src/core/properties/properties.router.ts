@@ -1,14 +1,14 @@
-import { Router } from 'express'
-const router = Router()
+import { Router } from 'express';
+const router = Router();
 
 import {
 	getProperties,
 	getPropertyById
-} from './properties.controller'
+} from './properties.controller';
 
-router.get('/properties', getProperties)
+router.get('/properties', getProperties);
 
-router.get('/properties/:id', getPropertyById)
+router.get('/properties/:id', getPropertyById);
 
 
-export default router
+export default router;

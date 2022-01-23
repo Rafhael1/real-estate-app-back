@@ -1,14 +1,14 @@
 // @ts-ignore
-import { name, version } from '../../package.json'
-import { Request, Response, NextFunction } from 'express'
+import { name, version } from '../../package.json';
+import { Request, Response, NextFunction } from 'express';
 
 export const content = ( req: Request, res: Response, next: NextFunction) => {
-	const response = res.json
+	const response = res.json;
 
 	// @ts-expect-error
-	const page: number = parseInt(req.query.page)
+	const page: number = parseInt(req.query.page);
 	// @ts-expect-error
-	const limit: number = parseInt(req.query.limit)
+	const limit: number = parseInt(req.query.limit);
 	// @ts-ignore
 	res.json = (obj) => {
 		obj = {
@@ -22,10 +22,10 @@ export const content = ( req: Request, res: Response, next: NextFunction) => {
 				offset: page * limit - limit
 			},
 			records: obj
-		}
-		obj.meta.totalPages = Math.floor(obj.meta.totalResults / obj.meta.limit)
-		response.call(res, obj)
-	}
+		};
+		obj.meta.totalPages = Math.floor(obj.meta.totalResults / obj.meta.limit);
+		response.call(res, obj);
+	};
 
-	next()
-}
+	next();
+};

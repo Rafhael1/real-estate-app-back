@@ -1,19 +1,19 @@
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 
-import Property from '../../models/property'
-import User from '../../models/user'
+import Property from '../../models/property';
+import User from '../../models/user';
 
 export const getAllUserPosts = async(req: Request, res: Response) => {
 	// @ts-expect-error
-	const userId: string = req.user.__id
+	const userId: string = req.user.__id;
     
-	const properties = await Property.find({ 'user.id': userId })
+	const properties = await Property.find({ 'user.id': userId });
 
-	res.send(properties)
-}
+	res.send(properties);
+};
 
 export const createProperty = async(req: Request, res: Response) => {
-	const filePath: any = req.files
+	const filePath: any = req.files;
 	const {
 		title,
 		description,
@@ -24,18 +24,18 @@ export const createProperty = async(req: Request, res: Response) => {
 		country,
 		price,
 		status,
-	} = JSON.parse(req.body.data)
+	} = JSON.parse(req.body.data);
 		
 	// @ts-ignore
-	const userId = req.user.__id
+	const userId = req.user.__id;
 
-	const userData = await User.findOne({ _id: userId })
+	const userData = await User.findOne({ _id: userId });
 	
-	const imagePaths: string[] = []
+	const imagePaths: string[] = [];
 
 	// convert into forEach
 	for(let i = 0; i < filePath.length; i++ ){
-		imagePaths.push(filePath[i].path)
+		imagePaths.push(filePath[i].path);
 	}
 	const record = {
 		title: title,
@@ -53,29 +53,29 @@ export const createProperty = async(req: Request, res: Response) => {
 			name: userData.name,
 			email: userData.email,
 		},
-	} 
+	}; 
 
-	await Property.create(record)
+	await Property.create(record);
 	
-	res.send('Uploaded sucessfully')
+	res.send('Uploaded sucessfully');
 
-}
+};
 
 export const editPostById = async(req: Request, res: Response) => {
-	const propertyId: string = req.params.postId
+	const propertyId: string = req.params.postId;
 
-	const filter = { _id: propertyId }
-	const update = req.body
+	const filter = { _id: propertyId };
+	const update = req.body;
 	
-	await Property.updateOne(filter, update)
+	await Property.updateOne(filter, update);
 
-	res.send('Post Updated Successfully')
-}
+	res.send('Post Updated Successfully');
+};
 
 export const deletePostById = async(req: Request, res: Response) => {
-	const propertyId: string = req.params.postId
+	const propertyId: string = req.params.postId;
 	
-	await Property.findByIdAndDelete(propertyId)
+	await Property.findByIdAndDelete(propertyId);
 	
-	res.send('Post deleted')
-}
+	res.send('Post deleted');
+};
