@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+
 const verify = (req: Request, res: Response, next: NextFunction) => {
 	const token = req.headers.authtoken as string;
 	if(!token) {
@@ -9,7 +10,7 @@ const verify = (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const verified = jwt.verify(token, process.env.TOKEN!);
 
-		// @ts-ignore
+		// @ts-expect-error
 		req.user = verified;
 
 		next();
