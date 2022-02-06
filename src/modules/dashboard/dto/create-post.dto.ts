@@ -9,4 +9,5 @@ export class CreatePostDto {
   country: string;
   price: number;
   status: string;
+  userId: string;
 }

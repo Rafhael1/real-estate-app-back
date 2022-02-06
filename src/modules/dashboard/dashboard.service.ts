@@ -1,22 +1,62 @@
-import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { Injectable, Inject } from '@nestjs/common';
+import { IDashboard } from './interfaces/dashboard.interface';
+import { IUser } from '../authentication/interfaces/user.interface';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 
 @Injectable()
 export class DashboardService {
-  createPost(createPostDto: CreatePostDto, images: Array<Express.Multer.File>) {
-    return 'This action adds a new dashboard';
+  constructor(
+    @Inject('PROPERTIES_MODEL')
+    private propertiesModel: Model<IDashboard>,
+    @Inject('USER_MODEL')
+    private userModel: Model<IUser>,
+  ) {}
+
+  async createPost(
+    createPostDto: CreatePostDto,
+    images: Array<Express.Multer.File>,
+  ) {
+    const { userId } = createPostDto;
+
+    const userData = await this.userModel.findOne({ _id: userId });
+
+    const imagesPaths = images?.map(file => {
+      return file.path;
+    });
+
+    const records = new this.propertiesModel({
+      ...createPostDto,
+      images: imagesPaths,
+      user: {
+        id: userData._id,
+        name: userData.name,
+        email: userData.email,
+      },
+    });
+    await records.save();
+
+    return 'Post created successfully!';
   }
 
-  findAllUserPosts() {
-    return `This action returns all dashboard`;
+  async findAllUserPosts(userId: string) {
+    console.log(userId);
+    const userPosts = await this.propertiesModel.find({ 'user.id': userId });
+    return { data: userPosts, pagination: { page: 10 } };
   }
 
-  updateUserPost(id: number, updateDashboardDto: UpdateDashboardDto) {
-    return `This action updates a #${id} dashboard`;
+  async updateUserPost(postId: string, updateDashboardDto: UpdateDashboardDto) {
+    const filter = { _id: postId };
+
+    await this.propertiesModel.updateOne(filter, updateDashboardDto);
+
+    return `This action updates a #${postId} dashboard`;
   }
 
-  removePost(id: number) {
-    return `This action removes a #${id} dashboard`;
+  async removePost(postId: string) {
+    await this.propertiesModel.findByIdAndDelete(postId);
+
+    return `This action removes a #${postId} dashboard`;
   }
 }

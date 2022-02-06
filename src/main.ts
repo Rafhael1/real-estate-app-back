@@ -18,6 +18,8 @@ async function bootstrap() {
   app.use(helmet());
   app.use(morgan('tiny'));
 
+  app.setGlobalPrefix('api');
+
   app.useGlobalPipes(
     new ValidationPipe({
       enableDebugMessages: true,

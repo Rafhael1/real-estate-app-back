@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../guards/validate.guard';
@@ -21,31 +22,30 @@ import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
-  @Get('all-user-posts')
-  findAll() {
-    return this.dashboardService.findAllUserPosts();
-  }
-
   @Post('create-real-estate')
   @UseInterceptors(FilesInterceptor('images', 20))
   createPost(
     @UploadedFiles() images: Array<Express.Multer.File>,
     @Body() createPostDto: CreatePostDto,
   ) {
-    console.log(images);
     return this.dashboardService.createPost(createPostDto, images);
+  }
+
+  @Get('all-user-posts')
+  findAll(@Req() request) {
+    return this.dashboardService.findAllUserPosts(request.user);
   }
 
   @Patch('edit-user-post/:postId')
   updateUserPost(
-    @Param('postId') id: string,
+    @Param('postId') postId: string,
     @Body() updateDashboardDto: UpdateDashboardDto,
   ) {
-    return this.dashboardService.updateUserPost(+id, updateDashboardDto);
+    return this.dashboardService.updateUserPost(postId, updateDashboardDto);
   }
 
   @Delete('delete-user-post/:postId')
-  removePost(@Param('postId') id: string) {
-    return this.dashboardService.removePost(+id);
+  removePost(@Param('postId') postId: string) {
+    return this.dashboardService.removePost(postId);
   }
 }

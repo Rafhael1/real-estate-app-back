@@ -6,11 +6,19 @@ export class PublicService {
     return `This action returns all public`;
   }
 
-  findAllPropeties() {
+  getTrendingProperties() {
     return 'all properties';
   }
 
-  findOne(id: number) {
+  getPropertyById(id: number) {
     return `This action returns a #${id} public`;
+  }
+
+  searchProperties() {
+    return `this returns the search results`;
+  }
+
+  increasePropertyViews() {
+    return 'Increased property view';
   }
 }

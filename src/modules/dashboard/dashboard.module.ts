@@ -1,7 +1,10 @@
 import * as dotenv from 'dotenv';
 import { Module } from '@nestjs/common';
+import { DatabaseModule } from '../../providers/database.module';
 import { DashboardService } from './dashboard.service';
 import { DashboardController } from './dashboard.controller';
+import { propertiesProviders } from '../../providers/properties.providers';
+import { userProviders } from '../../providers/user.providers';
 import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 
@@ -9,6 +12,7 @@ dotenv.config();
 
 @Module({
   imports: [
+    DatabaseModule,
     MulterModule.register({
       dest: `${__dirname}../../../../../real-estate-app-uploads`,
     }),
@@ -18,6 +22,6 @@ dotenv.config();
     }),
   ],
   controllers: [DashboardController],
-  providers: [DashboardService],
+  providers: [DashboardService, ...propertiesProviders, ...userProviders],
 })
 export class DashboardModule {}

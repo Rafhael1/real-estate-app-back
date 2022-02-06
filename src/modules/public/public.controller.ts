@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Patch, Param } from '@nestjs/common';
 import { PublicService } from './public.service';
 
 @Controller('public')
@@ -10,13 +10,23 @@ export class PublicController {
     return this.publicService.autocomplete();
   }
 
-  @Get()
-  findAllPropeties() {
-    return this.publicService.findAllPropeties();
+  @Get('/trending-properties')
+  getTrendingProperties() {
+    return this.publicService.getTrendingProperties();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publicService.findOne(+id);
+  @Get('property-details/:id')
+  getPropertyById(@Param('id') id: string) {
+    return this.publicService.getPropertyById(+id);
+  }
+
+  @Get('/search-properties')
+  searchProperties() {
+    return this.publicService.searchProperties();
+  }
+
+  @Patch('/increase-property-views-count')
+  increasePropertyViews() {
+    return this.publicService.increasePropertyViews();
   }
 }

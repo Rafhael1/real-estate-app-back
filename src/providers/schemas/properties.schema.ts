@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const UserSchema = new mongoose.Schema({
+export const PropertiesSchema = new mongoose.Schema({
   title: { type: String, required: false },
   description: { type: String, required: false },
   bathrooms: { type: Number, required: false },

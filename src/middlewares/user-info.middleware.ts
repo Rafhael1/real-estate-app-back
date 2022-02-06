@@ -3,22 +3,25 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import jwt_decode from 'jwt-decode';
 import { Request, Response, NextFunction } from 'express';
 
-interface ReqUser extends Request {
-  user: {
-    page: number;
-    pageSize: number;
-    offset: number;
-  };
-}
 @Injectable()
 export class UserMiddleware implements NestMiddleware {
-  use(req: ReqUser, res: Response, next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction) {
     const userToken = req.headers.authtoken;
 
-    // @ts-ignore
-    const decodedUser = jwt_decode(userToken);
+    if (userToken) {
+      // @ts-ignore
+      const decodedUser = jwt_decode(userToken);
 
-    console.log(decodedUser);
+      // @ts-ignore
+      req.user = decodedUser.__id;
+
+      req.body = {
+        ...req.body,
+        // @ts-ignore
+        userId: decodedUser.__id,
+      };
+    }
+
     next();
   }
 }

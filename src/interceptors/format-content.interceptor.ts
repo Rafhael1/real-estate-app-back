@@ -22,9 +22,8 @@ export class ResponseFormatterInterceptor implements NestInterceptor {
             Math.floor(
               response.pagination?.totalResults / response.pagination?.pageSize,
             ) || null,
-          hasNextPage: response.pagination?.hasNextPage || false,
         },
-        records: response.data || response,
+        data: response.data || response,
       })),
     );
   }
