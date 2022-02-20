@@ -8,20 +8,18 @@ export class UserMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const userToken = req.headers.authtoken;
 
-    if (userToken) {
+    if (userToken && userToken.length > 10) {
       // @ts-ignore
-      const decodedUser = jwt_decode(userToken);
+      const decodedUser = jwt_decode(userToken).__id;
 
       // @ts-ignore
-      req.user = decodedUser.__id;
+      req.user = decodedUser;
 
       req.body = {
         ...req.body,
-        // @ts-ignore
-        userId: decodedUser.__id,
+        userId: decodedUser,
       };
     }
-
     next();
   }
 }

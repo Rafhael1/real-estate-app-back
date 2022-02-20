@@ -5,6 +5,7 @@ import {
   Body,
   Patch,
   Param,
+  Req,
   Delete,
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
@@ -26,7 +27,7 @@ export class AuthenticationController {
   }
 
   @Post('verify-user')
-  verifyUser() {
-    return this.authenticationService.verifyUser();
+  verifyUser(@Req() request) {
+    return this.authenticationService.verifyUser(request.user);
   }
 }

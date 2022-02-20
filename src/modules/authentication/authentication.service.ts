@@ -57,7 +57,12 @@ export class AuthenticationService {
     };
   }
 
-  verifyUser() {
-    return 'This action adds a new authentication';
+  async verifyUser(userId: string) {
+    const verifyUser = await this.userModel.findOne({ _id: userId });
+    if (verifyUser) {
+      return true;
+    }
+
+    return false;
   }
 }

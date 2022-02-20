@@ -23,4 +23,5 @@ export const PropertiesSchema = new mongoose.Schema({
     default: Date.now,
   },
   views: { type: Number, required: false, default: 0 },
+  isPostActive: { type: Boolean, default: false },
 });

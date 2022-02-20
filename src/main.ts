@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 import morgan = require('morgan');
 import helmet from 'helmet';
 import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
@@ -10,10 +12,17 @@ import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: console,
   });
 
+  // app.use(
+  //   'api/realestates/files',
+  //   express.static('../../real-estates-app-uploads'),
+  // );
+  app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
+    prefix: '/api/images/',
+  });
   app.enableCors();
   app.use(helmet());
   app.use(morgan('tiny'));

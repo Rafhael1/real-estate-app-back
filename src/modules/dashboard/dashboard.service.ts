@@ -14,30 +14,34 @@ export class DashboardService {
     private userModel: Model<IUser>,
   ) {}
 
-  async createPost(
-    createPostDto: CreatePostDto,
-    images: Array<Express.Multer.File>,
-  ) {
-    const { userId } = createPostDto;
-
+  async createPost(createPostDto: CreatePostDto, userId: string) {
     const userData = await this.userModel.findOne({ _id: userId });
-
-    const imagesPaths = images?.map(file => {
-      return file.path;
-    });
 
     const records = new this.propertiesModel({
       ...createPostDto,
-      images: imagesPaths,
       user: {
         id: userData._id,
         name: userData.name,
         email: userData.email,
       },
     });
-    await records.save();
+    const save = await records.save();
 
-    return 'Post created successfully!';
+    return save._id;
+  }
+
+  async addImagesToPost(postId: string, images: Array<Express.Multer.File>) {
+    const filter = { _id: postId };
+
+    const imagesPaths = images?.map(file => {
+      const filename = file.originalname + new Date().getTime();
+      return filename;
+    });
+
+    const update = { $push: { images: imagesPaths } };
+    await this.propertiesModel.updateOne(filter, update);
+
+    return `Post of id ${postId} was updated successfully`;
   }
 
   async findAllUserPosts(userId: string) {

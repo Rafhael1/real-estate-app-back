@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseGuards,
@@ -16,6 +16,7 @@ import { AuthGuard } from '../../guards/validate.guard';
 import { DashboardService } from './dashboard.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
+import { storage } from '../../utils/multer.storage';
 
 @Controller('dashboard')
 @UseGuards(AuthGuard)
@@ -23,12 +24,17 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Post('create-real-estate')
-  @UseInterceptors(FilesInterceptor('images', 20))
-  createPost(
+  createPost(@Body() createPostDto: CreatePostDto, @Req() request) {
+    return this.dashboardService.createPost(createPostDto, request.user);
+  }
+
+  @Put('add-images-to-post/:postId')
+  @UseInterceptors(FilesInterceptor('images', 20, storage))
+  addImagesToPost(
+    @Param('postId') postId: string,
     @UploadedFiles() images: Array<Express.Multer.File>,
-    @Body() createPostDto: CreatePostDto,
   ) {
-    return this.dashboardService.createPost(createPostDto, images);
+    return this.dashboardService.addImagesToPost(postId, images);
   }
 
   @Get('all-user-posts')
@@ -36,7 +42,7 @@ export class DashboardController {
     return this.dashboardService.findAllUserPosts(request.user);
   }
 
-  @Patch('edit-user-post/:postId')
+  @Put('edit-user-post/:postId')
   updateUserPost(
     @Param('postId') postId: string,
     @Body() updateDashboardDto: UpdateDashboardDto,
