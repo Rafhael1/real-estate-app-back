@@ -54,4 +54,9 @@ export class DashboardController {
   removePost(@Param('postId') postId: string) {
     return this.dashboardService.removePost(postId);
   }
+
+  @Delete('delete-image/:imagename')
+  deleteImageById(@Param('imagename') imagename: string) {
+    return this.dashboardService.deleteImageById(imagename);
+  }
 }

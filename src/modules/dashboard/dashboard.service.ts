@@ -4,7 +4,7 @@ import { IDashboard } from './interfaces/dashboard.interface';
 import { IUser } from '../authentication/interfaces/user.interface';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
-
+import * as fs from 'fs';
 @Injectable()
 export class DashboardService {
   constructor(
@@ -34,7 +34,10 @@ export class DashboardService {
     const filter = { _id: postId };
 
     const imagesPaths = images?.map(file => {
-      const filename = file.originalname + new Date().getTime();
+      const filename = (file.originalname + new Date().getTime()).replace(
+        ' ',
+        '',
+      );
       return filename;
     });
 
@@ -62,5 +65,17 @@ export class DashboardService {
     await this.propertiesModel.findByIdAndDelete(postId);
 
     return `This action removes a #${postId} dashboard`;
+  }
+
+  async deleteImageById(imagename: string) {
+    //console.log(`${__dirname}../../../`);
+    fs.unlink(
+      `${__dirname}/../../../../real-estate-app-uploads/${imagename}`,
+      error => {
+        if (error) throw error;
+        console.log('File deleted!');
+      },
+    );
+    return 'File deleted!';
   }
 }

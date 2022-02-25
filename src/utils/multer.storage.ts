@@ -6,7 +6,7 @@ export const storage = {
     destination: `${__dirname}../../../../real-estate-app-uploads`,
     filename: (req, file, cb) => {
       const timestamp: number = new Date().getTime();
-      const filename: string = file.originalname.replace(/\s/g, '') + timestamp;
+      const filename: string = file.originalname.replace(' ', '') + timestamp;
       const extension = path.parse(file.originalname).ext;
 
       cb(null, `${filename}${extension}`);
