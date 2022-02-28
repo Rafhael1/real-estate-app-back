@@ -25,8 +25,8 @@ export class PublicController {
     return this.publicService.searchProperties();
   }
 
-  @Patch('/increase-property-views-count')
-  increasePropertyViews() {
-    return this.publicService.increasePropertyViews();
+  @Patch('/increase-property-views-count/:postId')
+  increasePropertyViews(@Param('postId') postId: string) {
+    return this.publicService.increasePropertyViews(postId);
   }
 }
