@@ -34,10 +34,7 @@ export class DashboardService {
     const filter = { _id: postId };
 
     const imagesPaths = images?.map(file => {
-      const filename = (file.originalname + new Date().getTime()).replace(
-        ' ',
-        '',
-      );
+      const filename = new Date().getTime() + file.originalname;
       return filename;
     });
 

@@ -17,7 +17,7 @@ export class PublicController {
 
   @Get('property-details/:id')
   getPropertyById(@Param('id') id: string) {
-    return this.publicService.getPropertyById(+id);
+    return this.publicService.getPropertyById(id);
   }
 
   @Get('/search-properties')

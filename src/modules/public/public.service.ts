@@ -11,12 +11,20 @@ export class PublicService {
     return `This action returns all public`;
   }
 
-  getTrendingProperties() {
-    return 'all properties';
+  async getTrendingProperties() {
+    const getTrendingProperties = await this.propertiesModel
+      .find()
+      .sort({ views: -1 })
+      .limit(10);
+    console.log(getTrendingProperties);
+    return getTrendingProperties;
   }
 
-  getPropertyById(id: number) {
-    return `This action returns a #${id} public`;
+  async getPropertyById(id: string) {
+    const property = await this.propertiesModel.findOne({
+      _id: id,
+    });
+    return property;
   }
 
   searchProperties() {
