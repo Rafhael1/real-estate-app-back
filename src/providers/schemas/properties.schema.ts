@@ -7,11 +7,12 @@ export const PropertiesSchema = new mongoose.Schema({
   bedrooms: { type: Number, required: false },
   squareMeter: { type: Number, required: false },
   address: { type: String, required: false },
-  propertyType: { type: String, required: false, default: 'Residencial' },
-  country: { type: String, required: false },
+  city: { type: String, required: false },
+  country: { type: String, required: true },
+  propertyType: { type: String, required: false, default: 'Residential' }, // Residential || Commercial
   price: { type: Number, required: false },
   status: { type: String, required: false },
-  images: { type: [String], required: true },
+  images: { type: [String], required: false },
   user: {
     id: { type: String, required: true },
     email: { type: String, required: true },

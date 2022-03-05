@@ -1,14 +1,34 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { Model } from 'mongoose';
 import { IDashboard } from '../dashboard/interfaces/dashboard.interface';
+import {
+  ISearchPropertiesQuery,
+  IGeolocations,
+} from './interfaces/public.interfaces';
 @Injectable()
 export class PublicService {
   constructor(
     @Inject('PROPERTIES_MODEL')
     private propertiesModel: Model<IDashboard>,
+    @Inject('GEOLOCATIONS_MODEL')
+    private geolocationsModel: Model<IGeolocations>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-  autocomplete() {
-    return `This action returns all public`;
+
+  async autocomplete(location: { country: string }) {
+    const cachedGeolocations: [IGeolocations] = await this.cacheManager.get(
+      'geolocations',
+    );
+
+    if (!cachedGeolocations?.some(e => e.country === location.country)) {
+      const res = await this.geolocationsModel.find({
+        country: location.country,
+      });
+      await this.cacheManager.set('geolocations', res, { ttl: 1000 });
+      return res;
+    }
+    return cachedGeolocations;
   }
 
   async getTrendingProperties() {
@@ -27,11 +47,25 @@ export class PublicService {
     return property;
   }
 
-  searchProperties() {
-    return `this returns the search results`;
+  async searchProperties(filter: ISearchPropertiesQuery) {
+    const data = await this.propertiesModel.find({
+      squareMeter: {
+        $gte: filter.minSquareMeters || 0,
+        $lte: filter.maxSquareMeters || 10000,
+      },
+      price: {
+        $gte: filter.minPrice || 0,
+        $lte: filter.maxPrice || 100000000,
+      },
+      bedrooms: filter.bedrooms || !null,
+      city: filter.city || !null,
+      country: filter.country || !null,
+    });
+
+    return data;
   }
 
-  async increasePropertyViews(postId) {
+  async increasePropertyViews(postId: string) {
     await this.propertiesModel.findOneAndUpdate(
       { _id: postId },
       { $inc: { views: 1 } },

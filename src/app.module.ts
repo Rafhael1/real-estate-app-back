@@ -10,14 +10,9 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { PublicModule } from './modules/public/public.module';
 import { PaginationMiddleware } from './middlewares/pagination.middleware';
 import { UserMiddleware } from './middlewares/user-info.middleware';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '../../real-estates-app-uploads'),
-    // }),
     ConfigModule.forRoot({ isGlobal: true }),
     DashboardModule,
     AuthenticationModule,

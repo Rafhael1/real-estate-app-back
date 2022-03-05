@@ -1,13 +1,13 @@
-import { Controller, Get, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Query } from '@nestjs/common';
 import { PublicService } from './public.service';
-
+import { ISearchPropertiesQuery } from './interfaces/public.interfaces';
 @Controller('public')
 export class PublicController {
   constructor(private readonly publicService: PublicService) {}
 
   @Get('/auto-complete-locations')
-  autocomplete() {
-    return this.publicService.autocomplete();
+  autocomplete(@Query() location: { country: string }) {
+    return this.publicService.autocomplete(location);
   }
 
   @Get('/trending-properties')
@@ -21,8 +21,8 @@ export class PublicController {
   }
 
   @Get('/search-properties')
-  searchProperties() {
-    return this.publicService.searchProperties();
+  searchProperties(@Query() filter: ISearchPropertiesQuery) {
+    return this.publicService.searchProperties(filter);
   }
 
   @Patch('/increase-property-views-count/:postId')

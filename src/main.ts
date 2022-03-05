@@ -16,10 +16,6 @@ async function bootstrap() {
     logger: console,
   });
 
-  // app.use(
-  //   'api/realestates/files',
-  //   express.static('../../real-estates-app-uploads'),
-  // );
   app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
     prefix: '/api/images/',
   });
