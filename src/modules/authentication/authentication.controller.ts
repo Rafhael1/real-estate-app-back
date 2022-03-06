@@ -7,10 +7,12 @@ import {
   Param,
   Req,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RegisterAuthenticationDto } from './dto/register-authentication.dto';
 import { LoginAuthenticationDto } from './dto/login-authentication.dto';
+import { AuthGuard } from '../../guards/validate.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -26,6 +28,7 @@ export class AuthenticationController {
     return this.authenticationService.login(loginAuthenticationDto);
   }
 
+  @UseGuards(AuthGuard)
   @Post('verify-user')
   verifyUser(@Req() request) {
     return this.authenticationService.verifyUser(request.user);
