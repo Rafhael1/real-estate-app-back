@@ -59,10 +59,12 @@ export class AuthenticationService {
 
   async verifyUser(userId: string) {
     const verifyUser = await this.userModel.findOne({ _id: userId });
-    if (verifyUser) {
-      return true;
-    }
 
-    return false;
+    return {
+      data: {
+        user: verifyUser,
+        isLogged: verifyUser ? true : false,
+      },
+    };
   }
 }
