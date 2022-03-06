@@ -54,11 +54,15 @@ export class AuthenticationService {
     return {
       authToken: token,
       userMessage: 'Logged in successfully',
+      isLogged: true,
+      user: user,
     };
   }
 
   async verifyUser(userId: string) {
-    const verifyUser = await this.userModel.findOne({ _id: userId });
+    const verifyUser = await this.userModel
+      .findOne({ _id: userId })
+      .select({ email: 1, name: 1, _id: 1 });
 
     return {
       data: {
