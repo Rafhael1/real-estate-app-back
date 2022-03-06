@@ -36,7 +36,6 @@ export class PublicService {
       .find()
       .sort({ views: -1 })
       .limit(10);
-    console.log(getTrendingProperties);
     return getTrendingProperties;
   }
 

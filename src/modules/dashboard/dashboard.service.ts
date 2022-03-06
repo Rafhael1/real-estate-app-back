@@ -45,7 +45,6 @@ export class DashboardService {
   }
 
   async findAllUserPosts(userId: string) {
-    console.log(userId);
     const userPosts = await this.propertiesModel.find({ 'user.id': userId });
     return { data: userPosts, pagination: { page: 10 } };
   }
@@ -65,12 +64,10 @@ export class DashboardService {
   }
 
   async deleteImageById(imagename: string) {
-    //console.log(`${__dirname}../../../`);
     fs.unlink(
       `${__dirname}/../../../../real-estate-app-uploads/${imagename}`,
       error => {
         if (error) throw error;
-        console.log('File deleted!');
       },
     );
     return 'File deleted!';
