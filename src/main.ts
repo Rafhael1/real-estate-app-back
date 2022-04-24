@@ -9,6 +9,8 @@ import { ResponseFormatterInterceptor } from './interceptors/format-content.inte
 import { HttpAdapterHost } from '@nestjs/core';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
 
+declare const module: any;
+
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
 async function bootstrap() {
@@ -37,5 +39,10 @@ async function bootstrap() {
   await app.listen(PORT, () => {
     Logger.log(`The real-estate api is now running on port: ${PORT}`);
   });
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
