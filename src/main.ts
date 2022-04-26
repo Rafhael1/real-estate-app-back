@@ -23,7 +23,7 @@ async function bootstrap() {
   });
   app.enableCors();
   app.use(helmet());
-  app.use(morgan('tiny'));
+  app.use(morgan('common'));
 
   app.setGlobalPrefix('api');
 
