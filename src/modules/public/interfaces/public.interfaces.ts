@@ -14,3 +14,8 @@ export interface IGeolocations {
   lat: string;
   lng: string;
 }
+
+export interface ICountries {
+  name: string;
+  cod: string;
+}

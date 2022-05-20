@@ -5,7 +5,10 @@ import { IDashboard } from '../dashboard/interfaces/dashboard.interface';
 import {
   ISearchPropertiesQuery,
   IGeolocations,
+  ICountries,
 } from './interfaces/public.interfaces';
+import searcher from 'src/utils/fuzzySearcher';
+
 @Injectable()
 export class PublicService {
   constructor(
@@ -13,10 +16,12 @@ export class PublicService {
     private propertiesModel: Model<IDashboard>,
     @Inject('GEOLOCATIONS_MODEL')
     private geolocationsModel: Model<IGeolocations>,
+    @Inject('COUNTRIES_MODEL')
+    private countriesModel: Model<ICountries>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async autocomplete(location: { country: string }) {
+  async autocomplete(location: { country: string; city: string }) {
     const cachedGeolocations: [IGeolocations] = await this.cacheManager.get(
       'geolocations',
     );
@@ -25,10 +30,19 @@ export class PublicService {
       const res = await this.geolocationsModel.find({
         country: location.country,
       });
-      await this.cacheManager.set('geolocations', res, { ttl: 1000 });
-      return res;
+      this.cacheManager.set('geolocations', res, { ttl: 1000 });
+      return searcher(res, location.city, ['city']);
     }
-    return cachedGeolocations;
+
+    const filtered = searcher(cachedGeolocations, location.city, ['city']);
+
+    return filtered;
+  }
+
+  async getCountries() {
+    const countries = await this.countriesModel.find();
+
+    return countries;
   }
 
   async getTrendingProperties() {
@@ -65,11 +79,9 @@ export class PublicService {
   }
 
   async increasePropertyViews(postId: string) {
-    await this.propertiesModel.findOneAndUpdate(
+    return await this.propertiesModel.findOneAndUpdate(
       { _id: postId },
       { $inc: { views: 1 } },
     );
-
-    return 'Increased property view';
   }
 }
