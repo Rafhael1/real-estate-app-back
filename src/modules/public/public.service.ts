@@ -40,7 +40,7 @@ export class PublicService {
   }
 
   async getCountries() {
-    const countries = await this.countriesModel.find();
+    const countries = await this.countriesModel.find().sort({ name: 1 });
 
     return countries;
   }
