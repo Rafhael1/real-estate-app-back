@@ -30,17 +30,26 @@ export class PublicService {
       const res = await this.geolocationsModel.find({
         country: location.country,
       });
-      this.cacheManager.set('geolocations', res, { ttl: 1000 });
+      this.cacheManager.set('geolocations', res, { ttl: 300 });
       return searcher(res, location.city, ['city']);
     }
 
-    const filtered = searcher(cachedGeolocations, location.city, ['city']);
-
-    return filtered;
+    if (location.city) {
+      const filtered = searcher(cachedGeolocations, location.city, ['city']);
+      return filtered;
+    }
+    return cachedGeolocations;
   }
 
   async getCountries() {
+    const cachedCountries: [ICountries] = await this.cacheManager.get(
+      'countries',
+    );
+    if (cachedCountries) {
+      return cachedCountries;
+    }
     const countries = await this.countriesModel.find().sort({ name: 1 });
+    this.cacheManager.set('countries', countries, { ttl: 5000 });
 
     return countries;
   }
