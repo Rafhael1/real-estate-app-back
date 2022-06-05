@@ -23,14 +23,14 @@ export class PublicService {
 
   async autocomplete(location: { country: string; city: string }) {
     const cachedGeolocations: [IGeolocations] = await this.cacheManager.get(
-      'geolocations',
+      location.country,
     );
 
     if (!cachedGeolocations?.some(e => e.country === location.country)) {
       const res = await this.geolocationsModel.find({
         country: location.country,
       });
-      this.cacheManager.set('geolocations', res, { ttl: 300 });
+      this.cacheManager.set(location.country, res, { ttl: 300 });
       return searcher(res, location.city, ['city']);
     }
 

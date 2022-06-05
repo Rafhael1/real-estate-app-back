@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
 import { HttpAdapterHost } from '@nestjs/core';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
+import * as compression from 'compression';
 
 declare const module: any;
 
@@ -22,6 +23,7 @@ async function bootstrap() {
     prefix: '/api/images/',
   });
   app.enableCors();
+  app.use(compression());
   app.use(helmet());
   app.use(morgan('common'));
 
