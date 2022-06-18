@@ -1,14 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as compression from 'compression';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
+import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
+
 import { join } from 'path';
 import morgan = require('morgan');
 import helmet from 'helmet';
-import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
-import { HttpAdapterHost } from '@nestjs/core';
-import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
-import * as compression from 'compression';
 
 declare const module: any;
 

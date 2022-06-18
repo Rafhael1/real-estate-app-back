@@ -28,15 +28,6 @@ export class DashboardController {
     return this.dashboardService.createPost(createPostDto, request.user);
   }
 
-  @Put('add-images-to-post/:postId')
-  @UseInterceptors(FilesInterceptor('images', 20, storage))
-  addImagesToPost(
-    @Param('postId') postId: string,
-    @UploadedFiles() images: Array<Express.Multer.File>,
-  ) {
-    return this.dashboardService.addImagesToPost(postId, images);
-  }
-
   @Get('all-user-posts')
   findAll(@Req() request) {
     return this.dashboardService.findAllUserPosts(request.user);

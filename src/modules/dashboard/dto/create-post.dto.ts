@@ -10,4 +10,5 @@ export class CreatePostDto {
   price: number;
   status: string;
   userId: string;
+  images: [string];
 }
