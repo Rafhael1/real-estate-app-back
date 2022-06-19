@@ -19,16 +19,13 @@ export class DashboardService {
   async createPost(createPostDto: CreatePostDto, userId: string) {
     const userData = await this.userModel.findOne({ _id: userId });
 
-    Promise.all(
-      createPostDto.images.map(async image => {
-        saveFile(image);
-      }),
-    );
-
-    // const filePath = `${__dirname}/../../../../real-estate-app-uploads/${createPostDto.image}`;
+    const imagesPath = createPostDto.images.map(image => {
+      return saveFile(image);
+    });
 
     const records = new this.propertiesModel({
       ...createPostDto,
+      images: imagesPath,
       user: {
         id: userData._id,
         name: userData.name,

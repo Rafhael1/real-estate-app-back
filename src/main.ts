@@ -9,6 +9,7 @@ import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
 import { join } from 'path';
 import morgan = require('morgan');
 import helmet from 'helmet';
+import { json } from 'body-parser';
 
 declare const module: any;
 
@@ -22,6 +23,7 @@ async function bootstrap() {
   app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
     prefix: '/api/images/',
   });
+  app.use(json({ limit: '5mb' }));
   app.enableCors();
   app.use(compression());
   app.use(helmet());

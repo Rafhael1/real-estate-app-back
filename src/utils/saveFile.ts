@@ -15,7 +15,7 @@ const saveFile = (image: string) => {
       console.log('File created');
     },
   );
-  return `${path}${filename}`;
+  return filename;
 };
 
 export default saveFile;
