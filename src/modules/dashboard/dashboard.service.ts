@@ -20,7 +20,10 @@ export class DashboardService {
     const userData = await this.userModel.findOne({ _id: userId });
 
     const imagesPath = createPostDto.images.map(image => {
-      return saveFile(image);
+      if (image.length) {
+        return saveFile(image);
+      }
+      return;
     });
 
     const records = new this.propertiesModel({
@@ -36,20 +39,6 @@ export class DashboardService {
 
     return save._id;
   }
-
-  // async addImagesToPost(postId: string, images: Array<Express.Multer.File>) {
-  //   const filter = { _id: postId };
-
-  //   const imagesPaths = images?.map(file => {
-  //     const filename = new Date().getTime() + file.originalname;
-  //     return filename;
-  //   });
-
-  //   const update = { $push: { images: imagesPaths } };
-  //   await this.propertiesModel.updateOne(filter, update);
-
-  //   return `Post of id ${postId} was updated successfully`;
-  // }
 
   async findAllUserPosts(userId: string) {
     const userPosts = await this.propertiesModel.find({ 'user.id': userId });
