@@ -70,20 +70,20 @@ export class PublicService {
   }
 
   async searchProperties(filter: ISearchPropertiesQuery) {
-    const data = await this.propertiesModel.find({
-      squareMeter: {
-        $gte: filter.minSquareMeters || 0,
-        $lte: filter.maxSquareMeters || 10000,
-      },
-      price: {
-        $gte: filter.minPrice || 0,
-        $lte: filter.maxPrice || 100000000,
-      },
-      bedrooms: filter.bedrooms || !null,
-      city: filter.city || !null,
-      country: filter.country || !null,
-    });
+    const filterCreator = {};
 
+    if (filter.city?.length > 1) {
+      filterCreator['city'] = filter.city;
+    }
+    const data = await this.propertiesModel.find({
+      price: {
+        $gte: filter?.minPrice || 0,
+        $lte: filter?.maxPrice || 100000000,
+      },
+      isPostActive: true,
+      country: filter.country,
+      filterCreator,
+    });
     return data;
   }
 

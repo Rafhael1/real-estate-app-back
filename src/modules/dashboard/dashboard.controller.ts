@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   Req,
+  Query,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../guards/validate.guard';
@@ -46,8 +47,8 @@ export class DashboardController {
     return this.dashboardService.removePost(postId);
   }
 
-  @Delete('delete-image/:imagename')
-  deleteImageById(@Param('imagename') imagename: string) {
-    return this.dashboardService.deleteImageById(imagename);
+  @Delete('delete-post-item/:id')
+  deleteImageById(@Param('id') id: number, @Query('image') image: string) {
+    return this.dashboardService.deletePostItem(id, image);
   }
 }

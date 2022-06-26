@@ -1,6 +1,4 @@
 export interface ISearchPropertiesQuery {
-  minSquareMeters: number | string;
-  maxSquareMeters: number | string;
   minPrice: number | string;
   maxPrice: number | string;
   bedrooms: number | string;

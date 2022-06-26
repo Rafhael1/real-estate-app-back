@@ -41,8 +41,11 @@ export class DashboardService {
   }
 
   async findAllUserPosts(userId: string) {
-    const userPosts = await this.propertiesModel.find({ 'user.id': userId });
-    return { data: userPosts, pagination: { page: 10 } };
+    const userPosts = await await this.propertiesModel.find({
+      'user.id': userId,
+    });
+
+    return { data: userPosts };
   }
 
   async updateUserPost(postId: string, updateDashboardDto: UpdateDashboardDto) {
@@ -54,12 +57,21 @@ export class DashboardService {
   }
 
   async removePost(postId: string) {
+    const post = await this.propertiesModel.findOne({ _id: postId });
+
+    post.images
+      .filter(el => el !== null)
+      .map((i: string) => {
+        deleteFile(i);
+      });
+
     await this.propertiesModel.findByIdAndDelete(postId);
 
     return `This action removes a #${postId} dashboard`;
   }
 
-  async deleteImageById(imagename: string) {
-    deleteFile(imagename);
+  async deletePostItem(id: number, image: string) {
+    await this.propertiesModel.deleteOne({ $pull: { images: image } });
+    deleteFile(image);
   }
 }
