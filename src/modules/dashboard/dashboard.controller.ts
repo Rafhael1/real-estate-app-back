@@ -7,17 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
-  UploadedFiles,
   Req,
   Query,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../guards/validate.guard';
 import { DashboardService } from './dashboard.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
-import { storage } from '../../utils/multer.storage';
 
 @Controller('dashboard')
 @UseGuards(AuthGuard)
