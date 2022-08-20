@@ -18,10 +18,9 @@ export class ResponseFormatterInterceptor implements NestInterceptor {
 					offset: response.pagination?.offset || null,
 					count: response.data?.length || response.length || 0,
 					totalResults: response.pagination?.totalResults || null,
-					totalPages:
-						Math.floor(
-							response.pagination?.totalResults / response.pagination?.pageSize,
-						) || null,
+					totalPages: Math.ceil(
+						response.pagination?.totalResults / response.pagination?.pageSize,
+					),
 				},
 				data: response.data || response,
 			})),

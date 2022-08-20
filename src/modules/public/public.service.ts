@@ -69,7 +69,7 @@ export class PublicService {
     return property;
   }
 
-  async searchProperties(filter: ISearchPropertiesQuery) {
+  async searchProperties(filter: ISearchPropertiesQuery, pagination) {
     const filterCreator = {};
 
     if (filter.city?.length > 1) {
@@ -85,7 +85,7 @@ export class PublicService {
         country: filter.country,
         filterCreator,
       })
-      .limit(5)
+      .limit(pagination.pageSize)
       .skip(filter.page - 1);
 
     const getTotalResults = this.propertiesModel.count({
@@ -101,9 +101,7 @@ export class PublicService {
     const [data, totalResults] = await Promise.all([getData, getTotalResults]);
 
     return {
-      pagination: {
-        totalResults,
-      },
+      pagination: { pageSize: pagination.pageSize, totalResults },
       data,
     };
   }

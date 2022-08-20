@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Query } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Query, Req } from '@nestjs/common';
 import { PublicService } from './public.service';
 import { ISearchPropertiesQuery } from './interfaces/public.interfaces';
 @Controller('public')
@@ -26,8 +26,8 @@ export class PublicController {
 	}
 
 	@Get('/search-properties')
-	searchProperties(@Query() filter: ISearchPropertiesQuery) {
-		return this.publicService.searchProperties(filter);
+	searchProperties(@Query() filter: ISearchPropertiesQuery, @Req() req: any) {
+		return this.publicService.searchProperties(filter, req.pagination);
 	}
 
 	@Patch('/increase-property-views-count/:postId')

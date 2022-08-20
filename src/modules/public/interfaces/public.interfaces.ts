@@ -5,6 +5,7 @@ export interface ISearchPropertiesQuery {
   city: string;
   country: string;
   page: number;
+  pageSize: number;
 }
 
 export interface IGeolocations {
