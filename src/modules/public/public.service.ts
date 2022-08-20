@@ -5,7 +5,10 @@ import { IDashboard } from '../dashboard/interfaces/dashboard.interface';
 import {
   ISearchPropertiesQuery,
   IGeolocations,
+  ICountries,
 } from './interfaces/public.interfaces';
+import searcher from 'src/utils/fuzzySearcher';
+
 @Injectable()
 export class PublicService {
   constructor(
@@ -13,22 +16,42 @@ export class PublicService {
     private propertiesModel: Model<IDashboard>,
     @Inject('GEOLOCATIONS_MODEL')
     private geolocationsModel: Model<IGeolocations>,
+    @Inject('COUNTRIES_MODEL')
+    private countriesModel: Model<ICountries>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async autocomplete(location: { country: string }) {
+  async autocomplete(location: { country: string; city: string }) {
     const cachedGeolocations: [IGeolocations] = await this.cacheManager.get(
-      'geolocations',
+      location.country,
     );
 
     if (!cachedGeolocations?.some(e => e.country === location.country)) {
       const res = await this.geolocationsModel.find({
         country: location.country,
       });
-      await this.cacheManager.set('geolocations', res, { ttl: 1000 });
-      return res;
+      this.cacheManager.set(location.country, res, { ttl: 300 });
+      return searcher(res, location.city, ['city']);
+    }
+
+    if (location.city) {
+      const filtered = searcher(cachedGeolocations, location.city, ['city']);
+      return filtered;
     }
     return cachedGeolocations;
+  }
+
+  async getCountries() {
+    const cachedCountries: [ICountries] = await this.cacheManager.get(
+      'countries',
+    );
+    if (cachedCountries) {
+      return cachedCountries;
+    }
+    const countries = await this.countriesModel.find().sort({ name: 1 });
+    this.cacheManager.set('countries', countries, { ttl: 5000 });
+
+    return countries;
   }
 
   async getTrendingProperties() {
@@ -36,7 +59,6 @@ export class PublicService {
       .find()
       .sort({ views: -1 })
       .limit(10);
-    console.log(getTrendingProperties);
     return getTrendingProperties;
   }
 
@@ -48,29 +70,27 @@ export class PublicService {
   }
 
   async searchProperties(filter: ISearchPropertiesQuery) {
-    const data = await this.propertiesModel.find({
-      squareMeter: {
-        $gte: filter.minSquareMeters || 0,
-        $lte: filter.maxSquareMeters || 10000,
-      },
-      price: {
-        $gte: filter.minPrice || 0,
-        $lte: filter.maxPrice || 100000000,
-      },
-      bedrooms: filter.bedrooms || !null,
-      city: filter.city || !null,
-      country: filter.country || !null,
-    });
+    const filterCreator = {};
 
+    if (filter.city?.length > 1) {
+      filterCreator['city'] = filter.city;
+    }
+    const data = await this.propertiesModel.find({
+      price: {
+        $gte: filter?.minPrice || 0,
+        $lte: filter?.maxPrice || 100000000,
+      },
+      isPostActive: true,
+      country: filter.country,
+      filterCreator,
+    });
     return data;
   }
 
   async increasePropertyViews(postId: string) {
-    await this.propertiesModel.findOneAndUpdate(
+    return await this.propertiesModel.findOneAndUpdate(
       { _id: postId },
       { $inc: { views: 1 } },
     );
-
-    return 'Increased property view';
   }
 }

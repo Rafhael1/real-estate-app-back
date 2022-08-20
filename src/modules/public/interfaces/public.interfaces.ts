@@ -1,6 +1,4 @@
 export interface ISearchPropertiesQuery {
-  minSquareMeters: number | string;
-  maxSquareMeters: number | string;
   minPrice: number | string;
   maxPrice: number | string;
   bedrooms: number | string;
@@ -13,4 +11,9 @@ export interface IGeolocations {
   name: string;
   lat: string;
   lng: string;
+}
+
+export interface ICountries {
+  name: string;
+  cod: string;
 }

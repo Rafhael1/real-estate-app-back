@@ -19,7 +19,7 @@ export class AuthenticationService {
 
     const userExists = await this.userModel.find({ email: email });
 
-    if (userExists) {
+    if (userExists.length) {
       throw new UnauthorizedException({
         userMessage: 'Email already taken! Try a different one.',
       });
@@ -28,13 +28,12 @@ export class AuthenticationService {
     const salt = await bcrypt.genSalt(10);
     const encryptedPassword = await bcrypt.hash(password, salt);
 
-    const createUser = new this.userModel({
+    await new this.userModel({
       ...registerAuthenticationDto,
       password: encryptedPassword,
-    });
-    await createUser.save();
+    }).save();
 
-    return 'This action adds a new authentication';
+    return await this.login(registerAuthenticationDto);
   }
 
   async login(loginAuthenticationDto: LoginAuthenticationDto) {
@@ -54,11 +53,15 @@ export class AuthenticationService {
     return {
       authToken: token,
       userMessage: 'Logged in successfully',
+      isLogged: true,
+      user: user,
     };
   }
 
   async verifyUser(userId: string) {
-    const verifyUser = await this.userModel.findOne({ _id: userId });
+    const verifyUser = await this.userModel
+      .findOne({ _id: userId })
+      .select({ email: 1, name: 1, _id: 1 });
 
     return {
       data: {

@@ -4,10 +4,12 @@ export class CreatePostDto {
   squareMeter: number;
   bathrooms: number;
   bedrooms: number;
-  address: string;
+  address?: string;
   propertyType: string;
+  city: string;
   country: string;
   price: number;
   status: string;
   userId: string;
+  images: [string];
 }

@@ -17,12 +17,11 @@ export const PropertiesSchema = new mongoose.Schema({
     id: { type: String, required: true },
     email: { type: String, required: true },
     name: { type: String, required: false },
-    phone: { type: Number, required: false },
   },
   postDate: {
     type: Date,
     default: Date.now,
   },
   views: { type: Number, required: false, default: 0 },
-  isPostActive: { type: Boolean, default: false },
+  isPostActive: { type: Boolean, default: true },
 });

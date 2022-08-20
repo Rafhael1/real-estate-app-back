@@ -6,13 +6,12 @@ export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const userToken: string = request.headers.authtoken;
+    const userToken: string = request.headers.authorization?.replace(
+      'Bearer ',
+      '',
+    );
 
-    const verify = this.jwtService.verify(userToken);
-
-    if (!verify) {
-      // throw new expectption
-    }
+    this.jwtService.verify(userToken);
 
     return true;
   }

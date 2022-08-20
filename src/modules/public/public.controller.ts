@@ -6,8 +6,13 @@ export class PublicController {
   constructor(private readonly publicService: PublicService) {}
 
   @Get('/auto-complete-locations')
-  autocomplete(@Query() location: { country: string }) {
+  autocomplete(@Query() location: { country: string; city: string }) {
     return this.publicService.autocomplete(location);
+  }
+
+  @Get('/countries')
+  getCountries() {
+    return this.publicService.getCountries();
   }
 
   @Get('/trending-properties')
