@@ -59,10 +59,7 @@ export class DashboardService {
     });
 
     images.forEach(async image => {
-      console.log(checkIsBase64(image));
-      console.log(bodyImages.includes(image));
       if (!checkIsBase64(image) && !bodyImages.includes(image)) {
-        console.log('shit');
         await this.deletePostItem(image);
       }
     });
