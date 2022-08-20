@@ -75,7 +75,7 @@ export class PublicService {
     if (filter.city?.length > 1) {
       filterCreator['city'] = filter.city;
     }
-    const data = await this.propertiesModel
+    const getData = this.propertiesModel
       .find({
         price: {
           $gte: filter?.minPrice || 0,
@@ -87,9 +87,22 @@ export class PublicService {
       })
       .limit(5)
       .skip(filter.page - 1);
+
+    const getTotalResults = this.propertiesModel.count({
+      price: {
+        $gte: filter?.minPrice || 0,
+        $lte: filter?.maxPrice || 100000000,
+      },
+      isPostActive: true,
+      country: filter.country,
+      filterCreator,
+    });
+
+    const [data, totalResults] = await Promise.all([getData, getTotalResults]);
+
     return {
       pagination: {
-        totalPages: Math.ceil(data.length / 5),
+        totalResults,
       },
       data,
     };
