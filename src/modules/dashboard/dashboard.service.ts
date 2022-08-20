@@ -1,3 +1,4 @@
+import checkIsBase64 from 'src/utils/checkIsBase64';
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { IDashboard } from './interfaces/dashboard.interface';
@@ -41,7 +42,7 @@ export class DashboardService {
   }
 
   async findAllUserPosts(userId: string) {
-    const userPosts = await await this.propertiesModel.find({
+    const userPosts = await this.propertiesModel.find({
       'user.id': userId,
     });
 
@@ -51,7 +52,40 @@ export class DashboardService {
   async updateUserPost(postId: string, updateDashboardDto: UpdateDashboardDto) {
     const filter = { _id: postId };
 
-    await this.propertiesModel.updateOne(filter, updateDashboardDto);
+    const bodyImages = updateDashboardDto.images.map(image => image);
+
+    const { images } = await this.propertiesModel.findOne({
+      _id: postId,
+    });
+
+    images.forEach(async image => {
+      console.log(checkIsBase64(image));
+      console.log(bodyImages.includes(image));
+      if (!checkIsBase64(image) && !bodyImages.includes(image)) {
+        console.log('shit');
+        await this.deletePostItem(image);
+      }
+    });
+
+    await Promise.all(
+      updateDashboardDto.images.map(async (image, index) => {
+        if (checkIsBase64(image)) {
+          const path = saveFile(image);
+          return await this.propertiesModel.updateOne(filter, {
+            $push: { images: path },
+          });
+        } else {
+          return;
+        }
+      }),
+    );
+
+    // Updates everything but images
+    delete updateDashboardDto.images;
+
+    await this.propertiesModel.updateOne(filter, {
+      ...updateDashboardDto,
+    });
 
     return `This action updates a #${postId} dashboard`;
   }
@@ -61,7 +95,7 @@ export class DashboardService {
 
     post.images
       .filter(el => el !== null)
-      .map((i: string) => {
+      .forEach((i: string) => {
         deleteFile(i);
       });
 
@@ -70,8 +104,8 @@ export class DashboardService {
     return `This action removes a #${postId} dashboard`;
   }
 
-  async deletePostItem(id: number, image: string) {
-    await this.propertiesModel.deleteOne({ $pull: { images: image } });
+  async deletePostItem(image: string) {
+    await this.propertiesModel.updateOne({ $pull: { images: image } });
     deleteFile(image);
   }
 }

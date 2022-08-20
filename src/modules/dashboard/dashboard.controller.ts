@@ -42,9 +42,4 @@ export class DashboardController {
   removePost(@Param('postId') postId: string) {
     return this.dashboardService.removePost(postId);
   }
-
-  @Delete('delete-post-item/:id')
-  deleteImageById(@Param('id') id: number, @Query('image') image: string) {
-    return this.dashboardService.deletePostItem(id, image);
-  }
 }
