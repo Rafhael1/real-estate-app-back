@@ -75,16 +75,24 @@ export class PublicService {
     if (filter.city?.length > 1) {
       filterCreator['city'] = filter.city;
     }
-    const data = await this.propertiesModel.find({
-      price: {
-        $gte: filter?.minPrice || 0,
-        $lte: filter?.maxPrice || 100000000,
+    const data = await this.propertiesModel
+      .find({
+        price: {
+          $gte: filter?.minPrice || 0,
+          $lte: filter?.maxPrice || 100000000,
+        },
+        isPostActive: true,
+        country: filter.country,
+        filterCreator,
+      })
+      .limit(5)
+      .skip(filter.page - 1);
+    return {
+      pagination: {
+        totalPages: Math.ceil(data.length / 5),
       },
-      isPostActive: true,
-      country: filter.country,
-      filterCreator,
-    });
-    return data;
+      data,
+    };
   }
 
   async increasePropertyViews(postId: string) {

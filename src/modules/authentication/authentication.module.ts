@@ -9,14 +9,14 @@ import { JwtModule } from '@nestjs/jwt';
 dotenv.config();
 
 @Module({
-  imports: [
-    DatabaseModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7 days' },
-    }),
-  ],
-  controllers: [AuthenticationController],
-  providers: [AuthenticationService, ...userProviders],
+	imports: [
+		DatabaseModule,
+		JwtModule.register({
+			secret: process.env.JWT_SECRET,
+			signOptions: { expiresIn: '7 days' },
+		}),
+	],
+	controllers: [AuthenticationController],
+	providers: [AuthenticationService, ...userProviders],
 })
 export class AuthenticationModule {}
