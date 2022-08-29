@@ -10,7 +10,6 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { PublicModule } from './modules/public/public.module';
 import { PaginationMiddleware } from './middlewares/pagination.middleware';
 import { UserMiddleware } from './middlewares/user-info.middleware';
-import { HttpsRedirectMiddleware } from './middlewares/https.middleware';
 
 @Module({
 	imports: [
@@ -28,7 +27,6 @@ export class AppModule implements NestModule {
 			path: '(*)',
 			method: RequestMethod.GET,
 		});
-		consumer.apply(HttpsRedirectMiddleware).forRoutes("*");
 		consumer
 			.apply(UserMiddleware)
 			.exclude({ path: 'authentication/register', method: RequestMethod.POST })

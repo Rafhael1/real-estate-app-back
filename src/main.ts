@@ -2,7 +2,6 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import compression from 'compression';
 import { AppModule } from './app.module';
-import fs from 'fs'
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
@@ -25,13 +24,7 @@ async function bootstrap() {
 		prefix: '/api/images/',
 	});
 	app.use(json({ limit: '5mb' }));
-	app.enableCors({
-		origin: [
-			'http://localhost:3000',
-			'https://realestatenamai.netlify.app/',
-			'*'
-		]
-	});
+	app.enableCors();
 	app.use(compression());
 	app.use(helmet());
 	app.use(morgan('common'));
