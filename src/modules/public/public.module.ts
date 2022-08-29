@@ -7,13 +7,13 @@ import { geolocationsProviders } from '../../providers/geolocations.providers';
 import { countriesProviders } from '../../providers/countries.providers';
 
 @Module({
-  imports: [DatabaseModule, CacheModule.register()],
-  controllers: [PublicController],
-  providers: [
-    PublicService,
-    ...propertiesProviders,
-    ...geolocationsProviders,
-    ...countriesProviders,
-  ],
+	imports: [DatabaseModule, CacheModule.register()],
+	controllers: [PublicController],
+	providers: [
+		PublicService,
+		...propertiesProviders,
+		...geolocationsProviders,
+		...countriesProviders,
+	],
 })
 export class PublicModule {}

@@ -6,21 +6,21 @@ import { AuthGuard } from '../../guards/validate.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+	constructor(private readonly authenticationService: AuthenticationService) {}
 
-  @Post('register')
-  register(@Body() registerAuthenticationDto: RegisterAuthenticationDto) {
-    return this.authenticationService.register(registerAuthenticationDto);
-  }
+	@Post('register')
+	register(@Body() registerAuthenticationDto: RegisterAuthenticationDto) {
+		return this.authenticationService.register(registerAuthenticationDto);
+	}
 
-  @Post('login')
-  login(@Body() loginAuthenticationDto: LoginAuthenticationDto) {
-    return this.authenticationService.login(loginAuthenticationDto);
-  }
+	@Post('login')
+	login(@Body() loginAuthenticationDto: LoginAuthenticationDto) {
+		return this.authenticationService.login(loginAuthenticationDto);
+	}
 
-  @UseGuards(AuthGuard)
-  @Post('verify-user')
-  verifyUser(@Req() request) {
-    return this.authenticationService.verifyUser(request.user);
-  }
+	@UseGuards(AuthGuard)
+	@Post('verify-user')
+	verifyUser(@Req() request) {
+		return this.authenticationService.verifyUser(request.user);
+	}
 }

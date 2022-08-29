@@ -69,13 +69,26 @@ export class PublicService {
     return property;
   }
 
-  async searchProperties(filter: ISearchPropertiesQuery) {
+  async searchProperties(filter: ISearchPropertiesQuery, pagination) {
     const filterCreator = {};
 
     if (filter.city?.length > 1) {
       filterCreator['city'] = filter.city;
     }
-    const data = await this.propertiesModel.find({
+    const getData = this.propertiesModel
+      .find({
+        price: {
+          $gte: filter?.minPrice || 0,
+          $lte: filter?.maxPrice || 100000000,
+        },
+        isPostActive: true,
+        country: filter.country,
+        filterCreator,
+      })
+      .limit(pagination.pageSize)
+      .skip(filter.page - 1);
+
+    const getTotalResults = this.propertiesModel.count({
       price: {
         $gte: filter?.minPrice || 0,
         $lte: filter?.maxPrice || 100000000,
@@ -84,7 +97,13 @@ export class PublicService {
       country: filter.country,
       filterCreator,
     });
-    return data;
+
+    const [data, totalResults] = await Promise.all([getData, getTotalResults]);
+
+    return {
+      pagination: { pageSize: pagination.pageSize, totalResults },
+      data,
+    };
   }
 
   async increasePropertyViews(postId: string) {

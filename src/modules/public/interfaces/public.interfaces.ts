@@ -4,6 +4,8 @@ export interface ISearchPropertiesQuery {
   bedrooms: number | string;
   city: string;
   country: string;
+  page: number;
+  pageSize: number;
 }
 
 export interface IGeolocations {

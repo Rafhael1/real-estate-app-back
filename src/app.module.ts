@@ -1,8 +1,8 @@
 import {
-  Module,
-  NestModule,
-  MiddlewareConsumer,
-  RequestMethod,
+	Module,
+	NestModule,
+	MiddlewareConsumer,
+	RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
@@ -12,27 +12,27 @@ import { PaginationMiddleware } from './middlewares/pagination.middleware';
 import { UserMiddleware } from './middlewares/user-info.middleware';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    DashboardModule,
-    AuthenticationModule,
-    PublicModule,
-  ],
-  controllers: [],
-  providers: [],
+	imports: [
+		ConfigModule.forRoot({ isGlobal: true }),
+		DashboardModule,
+		AuthenticationModule,
+		PublicModule,
+	],
+	controllers: [],
+	providers: [],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(PaginationMiddleware).forRoutes({
-      path: '(*)',
-      method: RequestMethod.GET,
-    });
-    consumer
-      .apply(UserMiddleware)
-      .exclude({ path: 'authentication/register', method: RequestMethod.POST })
-      .forRoutes({
-        path: '(*)',
-        method: RequestMethod.ALL,
-      });
-  }
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(PaginationMiddleware).forRoutes({
+			path: '(*)',
+			method: RequestMethod.GET,
+		});
+		consumer
+			.apply(UserMiddleware)
+			.exclude({ path: 'authentication/register', method: RequestMethod.POST })
+			.forRoutes({
+				path: '(*)',
+				method: RequestMethod.ALL,
+			});
+	}
 }

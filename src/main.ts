@@ -16,37 +16,37 @@ declare const module: any;
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: console,
-  });
+	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+		logger: console,
+	});
 
-  app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
-    prefix: '/api/images/',
-  });
-  app.use(json({ limit: '5mb' }));
-  app.enableCors();
-  app.use(compression());
-  app.use(helmet());
-  app.use(morgan('common'));
+	app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
+		prefix: '/api/images/',
+	});
+	app.use(json({ limit: '5mb' }));
+	app.enableCors();
+	app.use(compression());
+	app.use(helmet());
+	app.use(morgan('common'));
 
-  app.setGlobalPrefix('api');
+	app.setGlobalPrefix('api');
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      enableDebugMessages: true,
-    }),
-  );
+	app.useGlobalPipes(
+		new ValidationPipe({
+			enableDebugMessages: true,
+		}),
+	);
 
-  app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
-  app.useGlobalInterceptors(new ResponseFormatterInterceptor());
+	app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
+	app.useGlobalInterceptors(new ResponseFormatterInterceptor());
 
-  await app.listen(PORT, () => {
-    Logger.log(`The real-estate api is now running on port: ${PORT}`);
-  });
+	await app.listen(PORT, () => {
+		Logger.log(`The real-estate api is now running on port: ${PORT}`);
+	});
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
+	if (module.hot) {
+		module.hot.accept();
+		module.hot.dispose(() => app.close());
+	}
 }
 bootstrap();
