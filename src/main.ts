@@ -16,22 +16,22 @@ declare const module: any;
 
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
-const httpsOptions = {
-  key: fs.readFileSync('./secrets/private-key.pem'),
-  cert: fs.readFileSync('./secrets/public-certificate.pem'),
-};
-
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
 		logger: console,
-		httpsOptions
 	});
 
 	app.useStaticAssets(join(`${__dirname}/../../real-estate-app-uploads`), {
 		prefix: '/api/images/',
 	});
 	app.use(json({ limit: '5mb' }));
-	app.enableCors();
+	app.enableCors({
+		origin: [
+			'http://localhost:3000',
+			'https://realestatenamai.netlify.app/',
+			'*'
+		]
+	});
 	app.use(compression());
 	app.use(helmet());
 	app.use(morgan('common'));
