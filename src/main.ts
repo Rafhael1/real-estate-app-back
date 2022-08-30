@@ -18,7 +18,7 @@ declare const module: any;
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
 const httpsOptions = {
-	key: fs.readFileSync(path.resolve('./secrets/private.pem')),
+	key: fs.readFileSync(path.resolve('./secrets/privkey.pem')),
 	cert: fs.readFileSync(path.resolve('./secrets/cert.pem')),
 };
 
