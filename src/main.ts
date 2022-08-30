@@ -24,7 +24,8 @@ const httpsOptions = {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-		httpsOptions,
+		httpsOptions:
+			process.env.NODE_ENV === 'development' ? undefined : httpsOptions,
 		logger: console,
 	});
 
