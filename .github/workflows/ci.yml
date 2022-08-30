@@ -1,27 +1,18 @@
-name: Main CI
-
+name: Deploy to Digital ocean droplet
 on:
-	push:
-		branches:
-			- develop
-			- prod
-		pull_request:
-			- develop
-			- prod
+  push:
+    branches:
+      - prod
 
 jobs:
-	build:
-		runs-on: ubuntu-latest
-		strategy:
-			matrix:
-				node-version: [16.17.0]
-	steps:
-		- uses: actions/checkout@v2
-
-		- name: Use Node.js ${{ matrix.node-version }}
-			uses: action/setup-node@v1
-			with:
-				node-version: ${{ matrix.node-version }}
-
-		- name: Install dependencies
-			run: npm i --legacy-peer-deps
+  build:
+    name: Connect to Digital ocean droplet and deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: root
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: cd apps/${{ secrets.APP_NAME }} && git checkout prod &&  git pull && npm install && npm run build && pm2 restart ${{ secrets.APP_NAME }}
