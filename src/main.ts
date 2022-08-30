@@ -2,6 +2,8 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import compression from 'compression';
 import { AppModule } from './app.module';
+import * as fs from 'fs';
+import * as path from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ResponseFormatterInterceptor } from './interceptors/format-content.interceptor';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
@@ -15,8 +17,14 @@ declare const module: any;
 
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
+const httpsOptions = {
+	key: fs.readFileSync(path.resolve('./secrets/key.pem')),
+	cert: fs.readFileSync(path.resolve('./secrets/cert.pem')),
+};
+
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+		httpsOptions,
 		logger: console,
 	});
 
