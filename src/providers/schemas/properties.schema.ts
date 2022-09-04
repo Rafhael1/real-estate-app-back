@@ -10,7 +10,7 @@ export const PropertiesSchema = new mongoose.Schema({
 	city: { type: String, required: false },
 	country: { type: String, required: true },
 	propertyType: { type: String, required: false, default: 'Residential' }, // Residential || Commercial
-	price: { type: Number, required: false },
+	price: { type: String, required: false },
 	status: { type: String, required: false },
 	images: { type: [String], required: false },
 	user: {
