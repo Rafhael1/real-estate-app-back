@@ -72,6 +72,8 @@ export class PublicService {
 	async searchProperties(filter: ISearchPropertiesQuery, pagination) {
 		const filterCreator = {};
 
+		const searchType = filter.searchType === 'buy' ? 'For Sale' : 'For Rent';
+
 		if (filter.city?.length > 1) {
 			filterCreator['city'] = filter.city;
 		}
@@ -83,7 +85,8 @@ export class PublicService {
 				// },
 				isPostActive: true,
 				country: filter.country,
-				filterCreator,
+				status: searchType,
+				filterCreator
 			})
 			.limit(pagination.pageSize)
 			.skip(filter.page - 1);

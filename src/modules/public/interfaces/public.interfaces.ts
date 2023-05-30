@@ -6,6 +6,7 @@ export interface ISearchPropertiesQuery {
   country: string;
   page: number;
   pageSize: number;
+	searchType: string;
 }
 
 export interface IGeolocations {
