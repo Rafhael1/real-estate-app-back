@@ -17,15 +17,8 @@ declare const module: any;
 
 const PORT = process.env.REAL_ESTATE_API_PORT;
 
-const httpsOptions = {
-	key: fs.readFileSync(path.resolve('./secrets/privkey.pem')),
-	cert: fs.readFileSync(path.resolve('./secrets/cert.pem')),
-};
-
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-		httpsOptions:
-			process.env.NODE_ENV === 'development' ? undefined : httpsOptions,
 		logger: console,
 	});
 
